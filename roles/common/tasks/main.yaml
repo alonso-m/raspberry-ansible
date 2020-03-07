@@ -1,0 +1,59 @@
+---
+- name: Ensure hostname set
+  hostname:
+    name: "{{ inventory_hostname }}"
+  register: hostname
+  tags: hostname
+
+- name: Add IP address of all hosts to all hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.all }}"
+
+- name: set timezone to UTC
+  timezone:
+    name: CET
+  register: timezone
+
+# - name: gpu mem check
+#   shell: cat /boot/config.txt | grep gpu_mem
+#   changed_when: false
+#   register: gpu_mem_check
+
+# - name: reduce gpu memory
+#   lineinfile:
+#     path: /boot/config.txt
+#     line: gpu_mem=16
+#   register: gpu_mem
+#   when: gpu_mem_check.stdout == ""
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
+- name: apt-get upgrade
+  apt:
+    upgrade: full
+
+- name: Reboot
+  shell: sleep 2 && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: True
+  when: timezone or hostname is changed
+
+- name: Wait for Reboot
+  local_action: wait_for
+  args:
+    host: "{{ inventory_hostname }}"
+    port: 22
+    delay: 15
+    timeout: 120
+  become: False
