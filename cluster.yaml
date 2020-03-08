@@ -1,7 +1,7 @@
 - hosts: all
   roles:
-    - common
-      #    - kubeadm
+    #    - common
+    - kubeadm
       #
       #- hosts: master
       #  roles:

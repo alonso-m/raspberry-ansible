@@ -14,22 +14,24 @@
   when: hostvars[item].ansible_host is defined
   with_items: "{{ groups.all }}"
 
-- name: set timezone to UTC
+- name: set timezone to CET
   timezone:
     name: CET
   register: timezone
 
-# - name: gpu mem check
-#   shell: cat /boot/config.txt | grep gpu_mem
-#   changed_when: false
-#   register: gpu_mem_check
+- name: check custom fan config
+  shell: cat /boot/firmware/usercfg.txt | grep -ozP "dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000\ndtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000" 
+  changed_when: false
+  register: custom_fan_check
 
-# - name: reduce gpu memory
-#   lineinfile:
-#     path: /boot/config.txt
-#     line: gpu_mem=16
-#   register: gpu_mem
-#   when: gpu_mem_check.stdout == ""
+- name: change fan config
+  blockinfile:
+    path: /boot/firmware/usercfg.txt
+    insertafter: EOF
+    block: |
+      dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000
+      dtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000
+  when: custom_fan_check == ""
 
 - name: apt-get update
   apt:
@@ -47,7 +49,7 @@
   async: 1
   poll: 0
   ignore_errors: True
-  when: timezone or hostname is changed
+  when: timezone.changed or hostname.changed
 
 - name: Wait for Reboot
   local_action: wait_for
