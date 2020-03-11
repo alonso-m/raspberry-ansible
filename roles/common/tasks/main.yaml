@@ -14,17 +14,28 @@
   when: hostvars[item].ansible_host is defined
   with_items: "{{ groups.all }}"
 
-- name: set timezone to CET
+- name: Enabling cgroup options at boot
+  copy:
+    src: nobtcmd.txt
+    dest: /boot/firmware/nobtcmd.txt
+    owner: root
+    group: root
+    mode: 0755
+  register: cmdline
+  tags:
+    - boot
+
+- name: Set timezone to CET
   timezone:
     name: CET
   register: timezone
 
-- name: check custom fan config
+- name: Check custom fan config
   shell: cat /boot/firmware/usercfg.txt | grep -ozP "dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000\ndtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000" 
   changed_when: false
   register: custom_fan_check
 
-- name: change fan config
+- name: Change fan config
   blockinfile:
     path: /boot/firmware/usercfg.txt
     insertafter: EOF
@@ -44,12 +55,78 @@
   apt:
     upgrade: full
 
+- name: Installing zsh
+  apt: 
+    name: zsh
+    state: latest
+
+- name: Clone oh-my-zsh for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://malonso.me/bitbucket/scm/per/dotfiles.git'
+    dest: '/home/{{ username }}/.oh-my-zsh'
+    version: server
+
+- name: Clone oh-my-zsh zsh-autosuggestions add-on for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions.git'
+    version: server
+
+- name: Clone oh-my-zsh zsh-syntax-highlighting add-on for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting'
+    version: server
+
+- name: Switch to zsh
+  user: 
+    name: '{{ username }}'
+    shell: /usr/bin/zsh
+  sudo: yes 
+
+- name: Ensure dotfiles repository is cloned locally.
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_repo_local_destination }}"
+    version: "{{ dotfiles_repo_version }}"
+    accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
+  become: false
+
+- name: Ensure all configured dotfiles are links.
+  become_user: '{{ username }}'
+  command: "ls -F {{ dotfiles_home }}/{{ item }}"
+  register: existing_dotfile_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ dotfiles_files }}"
+
+- name: Remove existing dotfiles file if a replacement is being linked.
+  become_user: '{{ username }}'
+  file:
+    path: "{{ dotfiles_home }}/{{ dotfiles_files[item.0] }}"
+    state: absent
+  when: "'@' not in item.1.stdout"
+  with_indexed_items: "{{ existing_dotfile_info.results }}"
+
+- name: Link dotfiles into home folder.
+  become_user: '{{ username }}'
+  file:
+    src: "{{ dotfiles_repo_local_destination }}/{{ item }}"
+    dest: "{{ dotfiles_home }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ dotfiles_files }}"
+
 - name: Reboot
   shell: sleep 2 && shutdown -r now "Ansible Reboot"
   async: 1
   poll: 0
   ignore_errors: True
-  when: timezone.changed or hostname.changed
+  when: timezone.changed or hostname.changed or cmdline.changed
 
 - name: Wait for Reboot
   local_action: wait_for

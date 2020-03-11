@@ -1,11 +1,15 @@
 ---
 all:
   hosts:
-    node00:
+    node01:
       ansible_host: 192.168.188.71
       ansible_user: ubuntu
       ansible_python_interpreter: /usr/bin/python3
-    node01:
+    node02:
       ansible_host: 192.168.188.72
       ansible_user: ubuntu
       ansible_python_interpreter: /usr/bin/python3
+  children:
+    master:
+      hosts:
+       node01: {}  
