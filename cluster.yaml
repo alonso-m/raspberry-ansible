@@ -1,6 +1,6 @@
 - hosts: all
   roles:
-    #    - common
+    - common
       #    - kubeadm
       #
       #- hosts: master
@@ -10,4 +10,4 @@
       #
 - hosts: all:!master
   roles:
-    - workers
+    #    - workers

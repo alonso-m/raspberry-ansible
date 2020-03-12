@@ -63,29 +63,28 @@
 - name: Clone oh-my-zsh for users
   become_user: '{{ username }}'
   git:
-    repo: 'https://malonso.me/bitbucket/scm/per/dotfiles.git'
+    repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
     dest: '/home/{{ username }}/.oh-my-zsh'
-    version: server
+    version: master
 
 - name: Clone oh-my-zsh zsh-autosuggestions add-on for users
   become_user: '{{ username }}'
   git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions'
-    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions.git'
-    version: server
+    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions'
+    version: master
 
 - name: Clone oh-my-zsh zsh-syntax-highlighting add-on for users
   become_user: '{{ username }}'
   git:
     repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
     dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting'
-    version: server
+    version: master
 
 - name: Switch to zsh
   user: 
     name: '{{ username }}'
     shell: /usr/bin/zsh
-  sudo: yes 
 
 - name: Ensure dotfiles repository is cloned locally.
   git:
