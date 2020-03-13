@@ -42,7 +42,8 @@
     block: |
       dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000
       dtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000
-  when: custom_fan_check == ""
+  when: custom_fan_check.stdout == ""
+  register: custom_fan_config
 
 - name: apt-get update
   apt:
@@ -125,7 +126,7 @@
   async: 1
   poll: 0
   ignore_errors: True
-  when: timezone.changed or hostname.changed or cmdline.changed
+  when: timezone.changed or hostname.changed or cmdline.changed or custom_fan_config.changed
 
 - name: Wait for Reboot
   local_action: wait_for
