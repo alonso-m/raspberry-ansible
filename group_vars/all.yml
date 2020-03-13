@@ -4,6 +4,8 @@ podnet: 10.244.0.0/16
 flannel_version: "master"
 username: ubuntu
 
+systemd_dir: /etc/systemd/system
+
 dotfiles_repo: "https://malonso.me/bitbucket/scm/per/dotfiles.git"
 dotfiles_repo_version: server
 dotfiles_repo_accept_hostkey: false
