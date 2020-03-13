@@ -1,17 +1,12 @@
 - hosts: all
   roles:
-    #    - common
-      #    - kubeadm
-      #
-      #- hosts: master
-      #  roles:
-      #    - master
-      ##    - dashboard
-      #
+    - common
+    - k3s
+
+- hosts: master
+  roles:
+    - master
+
 - hosts: all:!master
   roles:
-    #    - workers
-- hosts: node03
-  roles:
-    - common
-    - k3s-master
+    - worker

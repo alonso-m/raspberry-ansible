@@ -1,0 +1,25 @@
+---
+#- name: Copy K3s service file
+#  template:
+#    src: "k3s.service.j2"
+#    dest: "/etc/systemd/system/k3s-node.service"
+#    owner: root
+#    group: root
+#    mode: 0755
+#
+#- name: Enable and check k3s service
+#  systemd:
+#    name: k3s-node
+#    daemon_reload: yes
+#    state: restarted
+#    enabled: yes
+#
+#- debug:
+#    name: "{{ master_ip }}"
+
+
+- name: Install k3s server node
+  shell: |
+    export K3S_TOKEN={{ hostvars['node01'].token }}
+    export K3S_URL=https;//{{ hostvars['node01'].master_ip }}:6444
+    curl -fsL https://get.k3s.io | sh -s agent --docker 

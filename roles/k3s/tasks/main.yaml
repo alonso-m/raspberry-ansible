@@ -23,9 +23,6 @@
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
     state: latest
 
-- name: Install k3s server
-  shell: curl -fsL https://get.k3s.io | sh -s server --docker
-
 - name: Enable IPv4 forwarding
   sysctl:
     name: net.ipv4.ip_forward

@@ -33,6 +33,7 @@
 - name: Check custom fan config
   shell: cat /boot/firmware/usercfg.txt | grep -ozP "dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000\ndtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000" 
   changed_when: false
+  ignore_errors: true
   register: custom_fan_check
 
 - name: Change fan config
@@ -121,18 +122,24 @@
   become: false
   with_items: "{{ dotfiles_files }}"
 
-- name: Reboot
-  shell: sleep 2 && shutdown -r now "Ansible Reboot"
-  async: 1
-  poll: 0
-  ignore_errors: True
+- name:  reboot the machine with all defaults
+  reboot:
   when: timezone.changed or hostname.changed or cmdline.changed or custom_fan_config.changed
 
-- name: Wait for Reboot
-  local_action: wait_for
-  args:
-    host: "{{ inventory_hostname }}"
-    port: 22
-    delay: 15
-    timeout: 120
-  become: False
+  #- name: Reboot
+  #  shell: sleep 2 && shutdown -r now "Ansible Reboot"
+  #  async: 1
+  #  poll: 0
+  #  ignore_errors: True
+  #  when: timezone.changed or hostname.changed or cmdline.changed or custom_fan_config.changed
+  #  register: reboot
+  #
+  #- name: Wait for Reboot
+  #  local_action: wait_for
+  #  args:
+  #    host: "{{ inventory_hostname }}"
+  #    port: 22
+  #    delay: 15
+  #    timeout: 120
+  #  become: False
+  #  when: reboot.changed
