@@ -1,10 +1,12 @@
 token: udy29x.ugyyk3tumg27atmr
 podnet: 10.244.0.0/16
 
-flannel_version: "master"
-username: ubuntu
+k3s_version: v1.17.3%2Bk3s1
+extra_server_args: "--server --docker --no-deploy traefik --no-deploy servicelb --write-kubeconfig-mode 644"
 
-systemd_dir: /etc/systemd/system
+flannel_version: "master"
+
+username: ubuntu
 
 dotfiles_repo: "https://malonso.me/bitbucket/scm/per/dotfiles.git"
 dotfiles_repo_version: server
