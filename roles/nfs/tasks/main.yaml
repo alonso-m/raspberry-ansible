@@ -1,0 +1,34 @@
+---
+- name: Create nfssare directory if it does not exist
+  file:
+    path: /mnt/nfsshare
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+
+- name: Mount up usb device
+  mount:
+    path: /mnt/nfsshare
+    src: /dev/sda1
+    fstype: xfs
+    state: mounted
+
+- name: Ensure NFS utilities are installed
+  apt:
+    name:
+      - nfs-kernel-server
+    state: present
+
+- name: Copy exports file
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reload NFS
+  command: 'exportfs -ra'
+
+- name: Ensure NFS is running
+  service: "name=nfs-kernel-server state=started enabled=yes"
