@@ -1,17 +1,17 @@
-#- hosts: all
-#  roles:
-#    - common
-#    - k3s
-#
-      #- hosts: master
-      #  roles:
-      #    - master
-      #
-      #- hosts: all:!master
-      #  roles:
-      #    - worker
+- hosts: all
+  roles:
+    - common
+    - k3s
+    - dotfiles
+      
+- hosts: master
+  roles:
+    - master
+
+- hosts: all:!master
+  roles:
+    - worker
 
 - hosts: nfs
   roles:
     - nfs
-

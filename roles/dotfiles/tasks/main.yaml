@@ -1,0 +1,64 @@
+- name: Installing zsh
+  apt: 
+    name: zsh
+    state: latest
+
+- name: Clone oh-my-zsh for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://github.com/ohmyzsh/ohmyzsh.git'
+    dest: '/home/{{ username }}/.oh-my-zsh'
+    version: master
+
+- name: Clone oh-my-zsh zsh-autosuggestions add-on for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions'
+    version: master
+
+- name: Clone oh-my-zsh zsh-syntax-highlighting add-on for users
+  become_user: '{{ username }}'
+  git:
+    repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+    dest: '/home/{{ username }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting'
+    version: master
+
+- name: Switch to zsh
+  user: 
+    name: '{{ username }}'
+    shell: /usr/bin/zsh
+
+- name: Ensure dotfiles repository is cloned locally.
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_repo_local_destination }}"
+    version: "{{ dotfiles_repo_version }}"
+    accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
+  become: false
+
+- name: Ensure all configured dotfiles are links.
+  become_user: '{{ username }}'
+  command: "ls -F {{ dotfiles_home }}/{{ item }}"
+  register: existing_dotfile_info
+  failed_when: false
+  check_mode: false
+  changed_when: false
+  with_items: "{{ dotfiles_files }}"
+
+- name: Remove existing dotfiles file if a replacement is being linked.
+  become_user: '{{ username }}'
+  file:
+    path: "{{ dotfiles_home }}/{{ dotfiles_files[item.0] }}"
+    state: absent
+  when: "'@' not in item.1.stdout"
+  with_indexed_items: "{{ existing_dotfile_info.results }}"
+
+- name: Link dotfiles into home folder.
+  become_user: '{{ username }}'
+  file:
+    src: "{{ dotfiles_repo_local_destination }}/{{ item }}"
+    dest: "{{ dotfiles_home }}/{{ item }}"
+    state: link
+  become: false
+  with_items: "{{ dotfiles_files }}"
