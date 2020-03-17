@@ -1,6 +1,6 @@
 - name: Installing zsh
   apt: 
-    name: zsh
+    name: ['zsh','xclip']
     state: latest
 
 - name: Clone oh-my-zsh for users
@@ -35,6 +35,7 @@
     dest: "{{ dotfiles_repo_local_destination }}"
     version: "{{ dotfiles_repo_version }}"
     accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
+    force: yes
   become: false
 
 - name: Ensure all configured dotfiles are links.
