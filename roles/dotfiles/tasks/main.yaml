@@ -1,4 +1,4 @@
-- name: Installing zsh
+- name: Installing zsh and xclip
   apt: 
     name: ['zsh','xclip']
     state: latest
