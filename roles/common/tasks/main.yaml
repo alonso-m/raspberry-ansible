@@ -30,21 +30,21 @@
     name: CET
   register: timezone
 
-- name: Check custom fan config
-  shell: cat /boot/firmware/usercfg.txt | grep -ozP "dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000\ndtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000" 
-  changed_when: false
-  ignore_errors: true
-  register: custom_fan_check
-
-- name: Change fan config
-  blockinfile:
-    path: /boot/firmware/usercfg.txt
-    insertafter: EOF
-    block: |
-      dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000
-      dtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000
-  when: custom_fan_check.stdout == ""
-  register: custom_fan_config
+  #- name: Check custom fan config
+  #  shell: cat /boot/firmware/usercfg.txt | grep -ozP "dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000\ndtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000" 
+  #  changed_when: false
+  #  ignore_errors: true
+  #  register: custom_fan_check
+  #
+  #- name: Change fan config
+  #  blockinfile:
+  #    path: /boot/firmware/usercfg.txt
+  #    insertafter: EOF
+  #    block: |
+  #      dtparam=poe_fan_temp0=75000,poe_fan_temp0_hyst=3000
+  #      dtparam=poe_fan_temp1=77000,poe_fan_temp1_hyst=2000
+  #  when: custom_fan_check.stdout == ""
+  #  register: custom_fan_config
 
 - name: apt-get update
   apt:

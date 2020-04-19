@@ -1,5 +1,5 @@
 ---
-- name: Install docker requirements
+- name: Install requirements
   apt:
     name: ['apt-transport-https', 'ca-certificates', 'curl', 'gnupg-agent', 'software-properties-common', 'nfs-common']
     state: latest
@@ -22,6 +22,17 @@
   apt:
     name: ['docker-ce', 'docker-ce-cli', 'containerd.io']
     state: latest
+
+- name: Add docker group
+  group:
+    name: docker
+    state: present
+
+- name: Add the user "{{ username }}" to the docker group 
+  user:
+    name: "{{ username }}"
+    groups: docker
+    append: yes
 
 - name: Enable IPv4 forwarding
   sysctl:

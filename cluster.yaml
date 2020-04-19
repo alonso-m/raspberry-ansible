@@ -1,17 +1,24 @@
-- hosts: all
-  roles:
-    - common
-    - k3s
-    - dotfiles
-      
-- hosts: master
-  roles:
-    - master
+#- hosts: all
+#  roles:
+#    - common
+#      #    - k3s
+#      
+#- hosts: master
+#  roles:
+#    - master
+#
+#- hosts: worker
+#  roles:
+#    - worker
+#
+#- hosts: dotfiles
+#  roles:
+#    - dotfiles
+#
+#- hosts: nfs-ssd
+#  roles:
+#    - nfs-ssd
 
-- hosts: all:!master
+- hosts: nfs-hdd
   roles:
-    - worker
-
-- hosts: nfs
-  roles:
-    - nfs
+    - nfs-hdd
