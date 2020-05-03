@@ -2,23 +2,30 @@
 #  roles:
 #    - common
 #      #    - k3s
-#      
-#- hosts: master
+##      
+#- hosts: k3s
 #  roles:
-#    - master
-#
+#    - k3s
+##- hosts: master
+##  roles:
+##    - master
+##
 #- hosts: worker
 #  roles:
 #    - worker
 #
-#- hosts: dotfiles
-#  roles:
-#    - dotfiles
+- hosts: dotfiles
+  roles:
+    - dotfiles
 #
 #- hosts: nfs-ssd
 #  roles:
 #    - nfs-ssd
-
-- hosts: nfs-hdd
+#
+#- hosts: hdd
+#  roles:
+#    - hdd
+#
+- hosts: overclock
   roles:
-    - nfs-hdd
+    - overclock

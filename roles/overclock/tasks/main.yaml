@@ -1,0 +1,10 @@
+- name: Copy usercfg.txt file
+  template:
+    src: usercfg.txt
+    dest: /boot/firmware
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reboot the machine
+  reboot:

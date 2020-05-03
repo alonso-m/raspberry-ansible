@@ -21,13 +21,20 @@ all:
       ansible_host: 192.168.188.75
       ansible_user: ubuntu
       ansible_python_interpreter: /usr/bin/python3
+    node06:
+      ansible_host: 192.168.188.76
+      ansible_user: ubuntu
+      ansible_python_interpreter: /usr/bin/python3
   children:
+    #    k3s:
+    #      hosts:
+    #        node06: {}
     #    master:
     #      hosts:
     #       node01: {}  
-    nfs-hdd:
-      hosts:
-        node04: {}
+    #    hdd:
+    #      hosts:
+    #        node04: {}
     #    nfs-ssd:
     #      hosts:
     #        node05: {}
@@ -36,8 +43,15 @@ all:
         #        node01: {}
         #        node02: {}
         #        node03: {}
-        node04: {}
+        #        node04: {}
         #        node05: {}
-    worker:
+        node06: {}
+        #    worker:
+        #      hosts:
+        #        node06: {}
+    overclock:
       hosts:
-        node04: {}
+        #        node01: {}
+        #        node02: {}
+        #        node03: {}
+        node06: {}
