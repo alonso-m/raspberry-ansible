@@ -1,6 +1,6 @@
 - name: Installing zsh and xclip
   apt: 
-    name: ['zsh','xclip','tmux']
+    name: ['zsh','xclip','tmux','vim']
     state: latest
 
 - name: Clone oh-my-zsh for users
