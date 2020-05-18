@@ -1,5 +1,19 @@
 ---
-- name: Install openmediavault
-  shell:  wget -O - https://github.com/OpenMediaVault-Plugin-Developers/installScript/raw/master/install | bash
-  args:
-    warn: no
+- name: Install disk requirements
+  apt:
+    name: ['zfs-dkms','nfs-kernel-server','samba']
+    state: latest
+
+- name: Turn on NFS
+  shell: zfs set sharenfs=on zfs
+
+- name: Copy smb.conf
+  template:
+    src: smb.conf
+    dest: /etc/samba/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Turn on Samba
+  shell: zfs set sharesmb=on zfs

@@ -1,6 +1,6 @@
-- hosts: all
+- hosts: common
   roles:
-    - common
+   - common
 - hosts: k3s
   roles:
     - k3s
@@ -15,7 +15,7 @@
     - dotfiles
 - hosts: nas
   roles:
-    -nas
+    - nas
 - hosts: overclock
   roles:
     - overclock

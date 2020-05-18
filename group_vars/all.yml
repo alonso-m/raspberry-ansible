@@ -1,7 +1,7 @@
 token: udy29x.ugyyk3tumg27atmr
 podnet: 10.244.0.0/16
 
-k3s_version: v1.17.4%2Bk3s1
+k3s_version: v1.17.5%2Bk3s1
 
 extra_server_args: "--docker --no-deploy traefik --no-deploy servicelb --write-kubeconfig-mode 644"
 extra_agent_args: "--docker --write-kubeconfig-mode 644"
@@ -10,7 +10,7 @@ flannel_version: "master"
 
 username: "{{ 'pi' if ansible_user == 'pi' else 'ubuntu' }}"
 
-dotfiles_repo: "https://malonso.me/bitbucket/scm/per/dotfiles.git"
+dotfiles_repo: "https://github.com/alonso-m/dotfiles.git"
 dotfiles_repo_version: server
 dotfiles_repo_accept_hostkey: false
 dotfiles_repo_local_destination: "/home/{{ username }}/dotfiles"

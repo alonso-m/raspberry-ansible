@@ -23,40 +23,50 @@ all:
       ansible_python_interpreter: /usr/bin/python3
     node06:
       ansible_host: 192.168.188.76
-      ansible_user: pi
+      ansible_user: ubuntu
       ansible_python_interpreter: /usr/bin/python3
   children:
+    common:
+      hosts:
+        #        node01: {}
+        #        node02: {}
+        #node03: {}
+        #node04: {}
+        #node05: {}
+        node06: {}
     k3s:
       hosts:
-        node01: {}
-        node02: {}
-        node03: {}
-        node04: {}
-        node05: {}
+        #        node01: {}
+        #        node02: {}
+        #node03: {}
+        #node04: {}
+        #node05: {}
+        #node06: {}
     master:
       hosts:
-       node01: {}  
+        #node01: {}  
     worker:
       hosts:
-        node02: {}
-        node03: {}
-        node04: {}
-        node05: {}
+        #node02: {}
+        #node03: {}
+        #node04: {}
+        #node05: {}
     nas:
       hosts:
         node06: {}
     dotfiles:
       hosts:
-        node01: {}
-        node02: {}
-        node03: {}
-        node04: {}
-        node05: {}
+        #node01: {}
+        #node02: {}
+        #node03: {}
+        #node04: {}
+        #node05: {}
         node06: {}
     overclock:
       hosts:
-        node01: {}
-        node02: {}
-        node03: {}
-        node04: {}
-        node05: {}
+        #node01: {}
+        #node02: {}
+        #node03: {}
+        #node04: {}
+        #node05: {}
+        node06: {}

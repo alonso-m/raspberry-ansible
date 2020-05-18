@@ -60,4 +60,4 @@
 
 - name:  reboot the machine with all defaults
   reboot:
-  when: timezone.changed or hostname.changed or cmdline.changed or custom_fan_config.changed
+  when: timezone.changed or hostname.changed or cmdline.changed 
