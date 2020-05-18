@@ -1,0 +1,10 @@
+---
+- name: Copy K3s service file
+  copy:
+    src: "../secrets-kubernetes/"
+    dest: "/home/ubuntu/"
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+
