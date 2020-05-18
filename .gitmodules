@@ -1,45 +1,45 @@
 [submodule "roles/apps/templates/bamboo-agent-kubernetes"]
-	path = roles/apps/templates/manual/bamboo-agent-kubernetes
+	path = roles/apps/files/manual/bamboo-agent-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/bamboo-agent-kubernetes.git
 [submodule "roles/apps/templates/bamboo-kubernetes"]
-	path = roles/apps/templates/manual/bamboo-kubernetes
+	path = roles/apps/files/manual/bamboo-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/bamboo-kubernetes.git
 [submodule "roles/apps/templates/bitbucket-kubernetes"]
-	path = roles/apps/templates/manual/bitbucket-kubernetes
+	path = roles/apps/files/manual/bitbucket-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/bitbucket-kubernetes.git
 [submodule "roles/apps/templates/bitwarden-kubernetes"]
-	path = roles/apps/templates/manual/bitwarden-kubernetes
+	path = roles/apps/files/manual/bitwarden-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/bitwarden-kubernetes.git
 [submodule "roles/apps/templates/jellyfin-kubernetes"]
-	path = roles/apps/files/jellyfin-kubernetes
+	path = roles/apps/files/helm/jellyfin-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/jellyfin-kubernetes.git
 [submodule "roles/apps/templates/mysql-kubernetes"]
-	path = roles/apps/templates/manual/mysql-kubernetes
+	path = roles/apps/files/manual/mysql-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/mysql-kubernetes.git
 [submodule "roles/apps/templates/nextcloud-kubernetes"]
-	path = roles/apps/templates/manual/nextcloud-kubernetes
+	path = roles/apps/files/manual/nextcloud-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/nextcloud-kubernetes.git
 [submodule "roles/apps/templates/pihole-kubernetes"]
-	path = roles/apps/files/pihole-kubernetes
+	path = roles/apps/files/helm/pihole-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/pihole-kubernetes.git
 [submodule "roles/apps/templates/postgres-kubernetes"]
-	path = roles/apps/templates/manual/postgres-kubernetes
+	path = roles/apps/files/manual/postgres-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/postgres-kubernetes.git
 [submodule "roles/apps/templates/transmission-openvpn-kubernetes"]
-	path = roles/apps/files/transmission-openvpn-kubernetes
+	path = roles/apps/files/helm/transmission-openvpn-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/transmission-openvpn-kubernetes.git
 [submodule "roles/apps/templates/wordpress-kubernetes"]
-	path = roles/apps/templates/manual/wordpress-kubernetes
+	path = roles/apps/files/manual/wordpress-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/wordpress-kubernetes.git
 [submodule "roles/apps/templates/wordpress-kubernetes-javier"]
-	path = roles/apps/templates/manual/wordpress-kubernetes-javier
+	path = roles/apps/files/manual/wordpress-kubernetes-javier
 	url = ssh://git@malonso.me:7999/rpi/wordpress-kubernetes-javier.git
 [submodule "roles/apps/templates/bamboo-config-kubernetes"]
-	path = roles/apps/templates/manual/bamboo-config-kubernetes
+	path = roles/apps/files/manual/bamboo-config-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/bamboo-config-kubernetes.git
 [submodule "roles/apps/templates/ingress-nginx-kubernetes"]
-	path = roles/apps/files/ingress-nginx-kubernetes
+	path = roles/apps/files/helm/ingress-nginx-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/ingress-nginx-kubernetes.git
 [submodule "roles/apps/templates/secrets-kubernetes"]
-	path = roles/apps/templates/secrets-kubernetes
+	path = roles/apps/files/secrets-kubernetes
 	url = ssh://git@malonso.me:7999/rpi/secrets-kubernetes.git
