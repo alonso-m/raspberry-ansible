@@ -19,3 +19,6 @@
 - hosts: overclock
   roles:
     - overclock
+- hosts: apps
+  roles:
+    - apps

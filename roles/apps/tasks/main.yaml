@@ -1,10 +1,79 @@
 ---
-- name: Copy K3s service file
+- name: Copy secrets
   copy:
-    src: "../secrets-kubernetes/"
-    dest: "/home/ubuntu/"
+    src: "secrets-kubernetes/"
+    dest: "/home/ubuntu/secret-kubernetes/"
     owner: ubuntu
     group: ubuntu
     mode: 0644
 
+- name: Install secrets
+  shell: kubectl apply -f /home/ubuntu/secret-kubernetes
 
+- name: Install helm
+  shell: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+- name: Copy helm apps
+  copy:
+    src: "helm/"
+    dest: "/home/ubuntu/helm/"
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: Install metallb namespace
+  shell: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml 
+
+- name: Install metallb
+  shell: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+
+- name: Install metallb secret
+  shell: kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)" 
+
+- name: Install metallb config map
+  shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/metallb-configmap.yaml
+
+- name: Install nginx
+  shell: helm install nginx-ingress stable/nginx-ingress --namespace kube-system --values /home/ubuntu/helm/ingress-nginx-kubernetes/ingress-nginx-values.yaml
+
+- name: Install CustomResourceDefinition
+  shell: kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml 
+
+- name: Add Jetstack repository
+  shell: helm repo add jetstack http://charts.jetstack.io && helm repo update
+
+- name: Install jetstack
+  shell: helm install cert-manager jetstack/cert-manager --namespace cert-manager
+  
+- name: Install cluster issuer prod                                                 
+  shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/cluster-issuer-prod.yaml
+
+- name: Install cluster issuer staging
+  shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/cluster-issuer-staging.yaml
+
+- name: Install pihole volumes
+  shell: kubectl apply -f /home/ubuntu/helm/pihole-kubernetes/pv.yaml && kubectl apply -f /home/ubuntu/helm/pihole-kubernetes/pvc.yaml
+
+- name: Install pihole
+  shell: helm install pihole /home/ubuntu/helm/pihole-kubernetes/pihole-kubernetes/charts/pihole --namespace pihole --values /home/ubuntu/helm/pihole-kubernetes/values.yaml
+
+- name: Install jellyfin volumes
+  shell: kubectl apply -f /home/ubuntu/helm/jellyfin-kubernetes/pv.yaml && kubectl apply -f /home/ubuntu/helm/jellyfin-kubernetes/pvc.yaml
+
+- name: Install jellyfin
+  shell: helm install jellyfin /home/ubuntu/helm/jellyfin-kubernetes/jellyfin-helm --values /home/ubuntu/helm/jellyfin-kubernetes/values.yaml
+
+- name: Install transmission-openvpn values
+  shell: kubectl apply -f /home/ubuntu/helm/transmission-openvpn-kubernetes/pv.yaml && kubectl apply -f /home/ubuntu/helm/transmission-openvpn-kubernetes/pvc.yaml
+
+- name: Add bananaspliff repo
+  shell: helm repo add bananaspliff https://bananaspliff.github.io/geek-charts && helm repo update
+
+- name: Install transmission-openvpn
+  shell: helm install transmission bananaspliff/transmission-openvpn --values /home/ubuntu/helm/transmission-openvpn-kubernetes/values.yaml
+
+- name: Install manual apps
+  shell: kubectl apply -f /home/ubuntu/manual/ --recursive
+
+- name: Install ingress
+  shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/ingress-http.yaml
