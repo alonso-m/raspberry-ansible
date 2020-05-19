@@ -13,10 +13,21 @@
 - name: Install helm
   shell: curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
+- name: Create kube config file for helm
+  shell: kubectl config view --raw > ~/.kube/config
+
 - name: Copy helm apps
   copy:
     src: "helm/"
     dest: "/home/ubuntu/helm/"
+    owner: ubuntu
+    group: ubuntu
+    mode: 0644
+
+- name: Copy manual apps
+  copy:
+    src: "manual/"
+    dest: "/home/ubuntu/manual/"
     owner: ubuntu
     group: ubuntu
     mode: 0644
@@ -33,6 +44,9 @@
 - name: Install metallb config map
   shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/metallb-configmap.yaml
 
+- name: Add default helm repository
+  shell: helm repo add stable https://kubernetes-charts.storage.googleapis.com && helm repo update
+
 - name: Install nginx
   shell: helm install nginx-ingress stable/nginx-ingress --namespace kube-system --values /home/ubuntu/helm/ingress-nginx-kubernetes/ingress-nginx-values.yaml
 
@@ -40,7 +54,13 @@
   shell: kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml 
 
 - name: Add Jetstack repository
-  shell: helm repo add jetstack http://charts.jetstack.io && helm repo update
+  shell: helm repo add jetstack http://charts.jetstack.io
+
+- name: Update repositories
+  shell: helm repo update
+
+- name: Create cert-manager namespace
+  shell: kubectl create namespace cert-manager
 
 - name: Install jetstack
   shell: helm install cert-manager jetstack/cert-manager --namespace cert-manager
@@ -50,6 +70,9 @@
 
 - name: Install cluster issuer staging
   shell: kubectl apply -f /home/ubuntu/helm/ingress-nginx-kubernetes/cluster-issuer-staging.yaml
+
+- name: Create pihole namespace
+  shell: kubectl create namespace pihole
 
 - name: Install pihole volumes
   shell: kubectl apply -f /home/ubuntu/helm/pihole-kubernetes/pv.yaml && kubectl apply -f /home/ubuntu/helm/pihole-kubernetes/pvc.yaml

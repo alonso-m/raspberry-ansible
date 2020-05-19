@@ -1,24 +1,24 @@
-- hosts: common
-  roles:
-   - common
-- hosts: k3s
-  roles:
-    - k3s
-- hosts: master
-  roles:
-    - master
-- hosts: worker
-  roles:
-    - worker
-- hosts: dotfiles
-  roles:
-    - dotfiles
-- hosts: nas
-  roles:
-    - nas
-- hosts: overclock
-  roles:
-    - overclock
+#- hosts: common
+#  roles:
+#   - common
+#- hosts: k3s
+#  roles:
+#    - k3s
+#- hosts: master
+#  roles:
+#    - master
+#- hosts: worker
+#  roles:
+#    - worker
+#- hosts: dotfiles
+#  roles:
+#    - dotfiles
+#- hosts: nas
+#  roles:
+#    - nas
+#- hosts: overclock
+#  roles:
+#    - overclock
 - hosts: apps
   roles:
     - apps

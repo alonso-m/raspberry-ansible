@@ -4,8 +4,11 @@
     name: ['zfs-dkms','nfs-kernel-server','samba']
     state: latest
 
+- name: Import ZFS pool
+  shell: zpool import zfs -f
+
 - name: Turn on NFS
-  shell: zfs set sharenfs=on zfs
+  shell: zfs set sharenfs="rw,no_root_squash" zfs
 
 - name: Copy smb.conf
   template:
@@ -17,3 +20,6 @@
 
 - name: Turn on Samba
   shell: zfs set sharesmb=on zfs
+
+- name: Reboot
+  reboot:

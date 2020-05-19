@@ -16,8 +16,8 @@
 
 - name: Enabling cgroup options at boot
   copy:
-    src: nobtcmd.txt
-    dest: /boot/firmware/nobtcmd.txt
+    src: cmdline.txt
+    dest: /boot/firmware/cmdline.txt
     owner: root
     group: root
     mode: 0755
